@@ -1,0 +1,67 @@
+WhatsApp Webhook Service - Setup Instructions
+==============================================
+
+This service handles Meta WhatsApp Business API webhook verification and message routing.
+
+STEP 1: Install Dependencies
+-----------------------------
+cd whatsapp-webhook
+npm install
+
+STEP 2: Configure Environment Variables
+----------------------------------------
+1. Copy .env.example to .env
+2. Fill in the required values:
+
+   VERIFY_TOKEN: Create a secure random string (e.g., "my_secure_verify_token_12345")
+   WHATSAPP_PHONE_NUMBER_ID: Get from Meta Business Manager
+   WHATSAPP_ACCESS_TOKEN: Get from Meta Business Manager
+   BACKEND_API_URL: Your main backend URL (e.g., http://localhost:5000)
+
+STEP 3: Run the Service
+------------------------
+Development mode:
+npm run dev
+
+Production mode:
+npm start
+
+The service will run on http://localhost:3000 (or your configured PORT)
+
+STEP 4: Configure Meta WhatsApp Webhook
+----------------------------------------
+1. Go to Meta Business Manager (https://business.facebook.com)
+2. Navigate to your WhatsApp Business App
+3. Go to Configuration > Webhooks
+4. Set Callback URL: https://your-domain.com/webhook
+5. Set Verify Token: (same as VERIFY_TOKEN in .env)
+6. Subscribe to webhook fields:
+   - messages
+   - message_status (optional)
+
+STEP 5: Deploy to Production
+-----------------------------
+For production, you need a public HTTPS URL. Options:
+
+1. Deploy to cloud platforms:
+   - Heroku
+   - Railway
+   - Render
+   - AWS/GCP/Azure
+
+2. Use ngrok for testing:
+   ngrok http 3000
+   Then use the ngrok URL in Meta webhook configuration
+
+WEBHOOK ENDPOINTS:
+------------------
+GET  /webhook  - Webhook verification (Meta requirement)
+POST /webhook  - Receive WhatsApp messages
+GET  /health   - Health check endpoint
+
+IMPORTANT NOTES:
+----------------
+- The webhook must be publicly accessible via HTTPS
+- Meta requires webhook verification before sending events
+- Keep your VERIFY_TOKEN and ACCESS_TOKEN secure
+- The service forwards messages to your backend API for processing
