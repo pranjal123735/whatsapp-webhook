@@ -182,7 +182,7 @@ async function forwardToBackend(messageData) {
     console.log(`🔄 Forwarding message to backend: ${backendUrl}`);
 
     const response = await axios.post(
-      `${backendUrl}/api/whatsapp/message`,
+      backendUrl,  // Use the full URL directly
       messageData,
       {
         headers: {
@@ -198,6 +198,7 @@ async function forwardToBackend(messageData) {
     console.error('❌ Error forwarding to backend:', error.message);
     if (error.response) {
       console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
     }
   }
 }
